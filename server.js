@@ -112,15 +112,43 @@ app.post("/answer", async (req, res) => {
     return res.status(500).json({ error: "Internal error" });
   }
 });
-
 app.get("/ayah-of-day", async (req, res) => {
-  // For demo, return a fixed ayah; replace with your index + RNG by seed
+  // Tiny rotating sample set (replace with your real dataset later)
+  const samples = [
+    {
+      surah: 1, ayah: 5,
+      arabic: "اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ",
+      translation: "Guide us to the straight path."
+    },
+    {
+      surah: 2, ayah: 286,
+      arabic: "لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا",
+      translation: "Allah does not burden a soul beyond that it can bear."
+    },
+    {
+      surah: 94, ayah: 6,
+      arabic: "إِنَّ مَعَ الْعُسْرِ يُسْرًا",
+      translation: "Indeed, with hardship comes ease."
+    },
+    {
+      surah: 4, ayah: 103,
+      arabic: "فَإِذَا قَضَيْتُمُ الصَّلَاةَ فَاذْكُرُوا اللَّهَ...",
+      translation: "And when you have completed the prayer, remember Allah..."
+    }
+  ];
+
+  // Optional seed param → deterministic pick if provided
+  const seed = Number(req.query.seed || Date.now());
+  const idx = Math.abs(seed) % samples.length;
+  const pick = samples[idx];
+
   return res.json({
-    ayah: { surah: 4, ayah: 103, arabic: "فَإِذَا قَضَيْتُمُ الصَّلَاةَ...", translation: "And when you have completed the prayer..." },
-    reflection: "This verse emphasizes remembering Allah beyond the formal prayer and that prayers have fixed times.",
-    sources: [{ title: "Sample translation", uri: "https://example.com/quran/4/103" }]
+    ayah: pick,
+    reflection: "A short reflection placeholder. (We’ll plug real tafsir later.)",
+    sources: [{ title: "Sample translation for demo", uri: "https://example.com" }]
   });
 });
+
 
 app.get("/prayertimes", async (req, res) => {
   // You can compute locally using e.g. adhan-js; here we just echo request
