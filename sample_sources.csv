@@ -1,0 +1,5 @@
+id,title,author,edition,language,license,uri
+q-ar,The Qur'an (Arabic),,Uthmani,ar,see terms,https://tanzil.net/
+q-en-sample,The Qur'an (English Translation - SAMPLE),Translator Name,2025,en,per license,https://example.com/translation
+tafseer-sample,Ibn Kathir (EN excerpts - SAMPLE),Ibn Kathir,abridged,en,per license,https://example.com/tafsir
+hadith-sample,Sahih al-Bukhari (excerpts - SAMPLE),Imam al-Bukhari,EN,en,per license,https://example.com/bukhari

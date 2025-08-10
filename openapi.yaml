@@ -1,0 +1,122 @@
+openapi: 3.1.0
+info:
+  title: Free Deen Assistant API
+  version: 0.1.0
+servers:
+  - url: https://your-backend.example.com
+paths:
+  /answer:
+    post:
+      summary: Answer a user question using RAG with citations.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                question:
+                  type: string
+                  description: The user's question.
+                madhhab:
+                  type: string
+                  enum: [hanafi, shafii, maliki, hanbali, none]
+                  default: none
+                locale:
+                  type: string
+                  description: User locale ("en", "ar", etc.).
+                top_k:
+                  type: integer
+                  default: 8
+                max_tokens:
+                  type: integer
+                  default: 600
+              required: [question]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  answer:
+                    type: string
+                  citations:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        source_id: { type: string }
+                        title: { type: string }
+                        uri: { type: string }
+                        locator: { type: string, description: "e.g., Qur'an 4:103 or Bukhari #1234" }
+                  confidence:
+                    type: number
+                  escalated:
+                    type: boolean
+  /ayah-of-day:
+    get:
+      summary: Return an ayah and short reflection/tafsir snippet.
+      parameters:
+        - in: query
+          name: edition
+          schema: { type: string, example: "en.pickthall" }
+        - in: query
+          name: seed
+          schema: { type: integer, description: "Optional deterministic seed." }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ayah:
+                    type: object
+                    properties:
+                      surah: { type: integer }
+                      ayah: { type: integer }
+                      arabic: { type: string }
+                      translation: { type: string }
+                  reflection: { type: string }
+                  sources:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        title: { type: string }
+                        uri: { type: string }
+  /prayertimes:
+    get:
+      summary: Compute prayer times locally (no tokens).
+      parameters:
+        - in: query
+          name: lat
+          required: true
+          schema: { type: number }
+        - in: query
+          name: lon
+          required: true
+          schema: { type: number }
+        - in: query
+          name: date
+          schema: { type: string, example: "2025-08-10" }
+        - in: query
+          name: method
+          schema: { type: string, example: "MuslimWorldLeague" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fajr: { type: string }
+                  sunrise: { type: string }
+                  dhuhr: { type: string }
+                  asr: { type: string }
+                  maghrib: { type: string }
+                  isha: { type: string }
