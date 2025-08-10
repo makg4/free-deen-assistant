@@ -143,6 +143,8 @@ app.get("/ayah-of-day", async (req, res) => {
   const pick = samples[idx];
 
   return res.json({
+    seed_used: seed,      // or "s" if you used my latest snippet
+index_used: idx
     ayah: pick,
     reflection: "A short reflection placeholder. (We’ll plug real tafsir later.)",
     sources: [{ title: "Sample translation for demo", uri: "https://example.com" }]
